@@ -1,6 +1,7 @@
 import cv2 as cv
-import numpy as np
 import pyautogui
+import numpy as np
+
 
 cam = cv.VideoCapture(0)
 
