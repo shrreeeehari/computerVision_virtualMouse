@@ -110,22 +110,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: always
     
   ui:
     image: "metaflow-ui:latest"
     environment:
-      METAFLOW_SERVICE="http://ui_backend:8083/"
+      METAFLOW_SERVICE: "http://ui_backend:8083/"
     ports:
       - "3000:3000"
     restart: always
 
   framework:
     image: "shrihari703332387/metaflow_framework:latest"
+    command: tail -f /dev/null
     ports:
       - "5001:5001"
-    restart: always
 
 volumes:
   db_dev_data:
-
