@@ -92,7 +92,6 @@ services:
       - MF_MIGRATION_PORT=${MF_MIGRATION_PORT:-8082}
     depends_on:
       - db
-    restart: always
 
   db:
     image: "postgres:11"
@@ -110,6 +109,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: always
     
   ui:
     image: "metaflow-ui:latest"
@@ -124,6 +124,7 @@ services:
     command: tail -f /dev/null
     ports:
       - "5001:5001"
+    restart: always
 
 volumes:
   db_dev_data:
