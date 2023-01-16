@@ -1,11 +1,7 @@
 version: "3"
 services:
   ui_backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.ui_service
-      args:
-        UI_ENABLED: 1
+    image: "texago/mlds:metaflow-service-ui_backend"
     ports:
       - "${MF_UI_METADATA_PORT:-8083}:${MF_UI_METADATA_PORT:-8083}"
     volumes:
@@ -53,11 +49,9 @@ services:
     restart: always
 
   metadata:
-    build:
-      context: .
-      dockerfile: Dockerfile.metadata_service
+    image: "texago/mlds:metaflow-service-metadata"
     ports:
-      - "${MF_METADATA_PORT:-8088}:${MF_METADATA_PORT:-8080}"
+      - "${MF_METADATA_PORT:-8080}:${MF_METADATA_PORT:-8080}"
     volumes:
       - ./services:/root/services
     environment:
@@ -75,9 +69,7 @@ services:
 
   migration:
     command: ["/opt/latest/bin/python3", "/root/run_goose.py"]
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "texago/mlds:metaflow-service-migration"
     volumes:
       - ./services:/root/services
     environment:
@@ -101,7 +93,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5400:5432"
+      - "5432:5432"
     volumes:
       - db_dev_data:/var/lib/postgresql/data2
     healthcheck:
@@ -112,16 +104,17 @@ services:
     restart: always
     
   ui:
-    image: "metaflow-ui:latest"
+    image: "texago/mlds:metaflow-ui"
     environment:
       METAFLOW_SERVICE: "http://localhost:8083/"
     ports:
       - "3000:3000"
     restart: always
 
-  framework:
-    image: "shrihari703332387/metaflow_framework:latest"
-    command: tail -f /dev/null
+  pipeline:
+    image: "siddharthsingh1/metaflow-pipeline"
+    volumes:
+      - ./practice:/root/practice
     ports:
       - "5001:5001"
     restart: always
